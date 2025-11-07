@@ -1,0 +1,432 @@
+/* CSS Variables */
+:root { 
+    --primary: #0A192F;
+    --primary-dark: #020C1B;
+    --secondary: #8892B0;
+    --light: #E6F1FF;
+    --accent: #64FFDA;
+    --gray: #8892B0;
+    --dark: #0A192F;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--primary);
+    color: var(--light);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+}
+
+.month-navigation {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-button {
+    background: var(--primary-dark);
+    color: var(--light);
+    border: 1px solid var(--secondary);
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.nav-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: var(--primary-dark);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Chart Styles */
+.chart-container {
+    height: 300px;
+    position: relative;
+}
+
+.bar-chart {
+    display: flex;
+    align-items: end;
+    height: 100%;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--accent), #64ffda88);
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    min-height: 20px;
+    transition: all 0.3s;
+}
+
+.bar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--secondary);
+}
+
+/* Metrics Styles */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.metric {
+    background: rgba(136, 146, 176, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 10px 0;
+}
+
+.metric-label {
+    font-size: 0.9em;
+    color: var(--secondary);
+}
+
+/* Input Styles */
+.input-section {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--secondary);
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(136, 146, 176, 0.1);
+    border: 1px solid var(--secondary);
+    border-radius: 6px;
+    color: var(--light);
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background: rgba(136, 146, 176, 0.2);
+    color: var(--light);
+    border: 1px solid var(--secondary);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* File Upload */
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 2px dashed var(--secondary);
+    border-radius: 8px;
+    margin: 15px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.file-upload:hover {
+    border-color: var(--accent);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(136, 146, 176, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateX(5px);
+}
+
+.action-icon {
+    font-size: 1.5em;
+}
+
+/* Calculation Results */
+.calculation-results {
+    margin-top: 20px;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(136, 146, 176, 0.2);
+}
+
+.result-value {
+    font-weight: bold;
+    color: var(--accent);
+}
+
+/* Calendar Styles */
+.calendar-container {
+    margin-top: 30px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--secondary);
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.calendar-day {
+    background: var(--primary-dark);
+    padding: 10px;
+    min-height: 100px;
+    position: relative;
+}
+
+.calendar-day.header {
+    background: var(--primary);
+    font-weight: bold;
+    text-align: center;
+    min-height: auto;
+    padding: 15px;
+}
+
+.day-number {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--light);
+}
+
+.transaction {
+    font-size: 0.75em;
+    padding: 4px 6px;
+    margin: 3px 0;
+    background: rgba(100, 255, 218, 0.1);
+    border-radius: 4px;
+    border-left: 3px solid var(--accent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transaction.income {
+    background: rgba(76, 175, 80, 0.1);
+    border-left-color: #4CAF50;
+}
+
+.transaction.expense {
+    background: rgba(244, 67, 54, 0.1);
+    border-left-color: #F44336;
+}
+
+.transaction.tax {
+    background: rgba(255, 152, 0, 0.1);
+    border-left-color: #FF9800;
+}
+
+/* NFE Styles */
+.nfe-section {
+    margin-top: 20px;
+}
+
+.nfe-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(136, 146, 176, 0.1);
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.nfe-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #FFC107;
+}
+
+.status-paid {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+}
+
+.status-overdue {
+    background: rgba(244, 67, 54, 0.2);
+    color: #F44336;
+}
+
+/* Automation Stats */
+.automation-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.automation-stat {
+    text-align: center;
+    padding: 15px;
+    background: rgba(136, 146, 176, 0.1);
+    border-radius: 8px;
+}
+
+.stat-number {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 10px 0;
+}
+
+/* Data Sources */
+.data-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.source-tag {
+    padding: 6px 12px;
+    background: rgba(100, 255, 218, 0.1);
+    border-radius: 20px;
+    font-size: 0.8em;
+    border: 1px solid var(--accent);
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 8px;
+    background: rgba(136, 146, 176, 0.2);
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+}
