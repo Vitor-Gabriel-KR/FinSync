@@ -61,9 +61,9 @@
                             </div>
                         </div>
                         <div class="metric">
-                            <div class="metric-label">Lucro Líquido</div>
-                            <div class="metric-value" style="color: green;">
-                                R$ {{ "{:,.2f}".format(dados.lucro_liquido).replace(",", "X").replace(".", ",").replace("X", ".") if dados else "0,00" }}
+                            <div class="metric-label">Investimento Total</div>
+                            <div class="metric-value">
+                                R$ {{ "{:,.2f}".format(dados.impostos).replace(",", "X").replace(".", ",").replace("X", ".") if dados else "0,00" }}
                             </div>
                         </div>
                         <div class="metric">
@@ -72,15 +72,15 @@
                                 R$ {{ "{:,.2f}".format(dados.impostos).replace(",", "X").replace(".", ",").replace("X", ".") if dados else "0,00" }}
                             </div>
                         </div>
+                                                <div class="metric">
+                            <div class="metric-label">Lucro Líquido</div>
+                            <div class="metric-value" style="color: green;">
+                                R$ {{ "{:,.2f}".format(dados.lucro_liquido).replace(",", "X").replace(".", ",").replace("X", ".") if dados else "0,00" }}
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="card-title" style="margin-top: 20px;">🔗 Fontes de Dados</div>
-                    <div class="data-sources">
-                        <div class="source-tag">Extrato Bancário</div>
-                        <div class="source-tag">Notas Fiscais</div>
-                        <div class="source-tag">Planilhas</div>
-                        <div class="source-tag">DAS MEI</div>
-                    </div>
+
                 </div>
 
             <!-- Quick Actions Section -->
@@ -163,43 +163,69 @@
             <div class="card">
                 <div class="card-title">🧮 Previsões do Mês</div>
                 <div class="calculation-results">
+
                     <div class="result-item">
-                        <span>Total Previsto para Gastar:</span>
-                        <span class="result-value">R$ 3.500,00</span>
+                        <span>💰 Salário:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.salario).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
                     </div>
                     <div class="result-item">
-                        <span>Valor Disponível:</span>
-                        <span class="result-value">R$ 1.820,00</span>
+                        <span>🏠 Custo de Vida:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.custo_vida).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
                     </div>
                     <div class="result-item">
-                        <span>Para Investir:</span>
-                        <span class="result-value">R$ 500,00</span>
+                        <span>📦 Gastos Presumidos:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.gastos_presumidos).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
                     </div>
                     <div class="result-item">
-                        <span>Para Emergências:</span>
-                        <span class="result-value">R$ 320,00</span>
+                        <span>📈 Investimento:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.investimento).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
                     </div>
                     <div class="result-item">
-                        <span>Próximo DAS MEI:</span>
-                        <span class="result-value">R$ 67,90</span>
+                        <span>💳 Crédito:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.credito).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span>📡 Assinaturas:</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.assinaturas).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span>⚖️ Imposto (DAS MEI):</span>
+                        <span class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.imposto).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </span>
+                    </div>
+
+                    <hr style="margin: 15px 0; opacity: 0.3;">
+
+                    <div class="result-item total">
+                        <strong>💸 Sobra Prevista:</strong>
+                        <strong class="result-value">
+                            R$ {{ "{:,.2f}".format(previsoes.lucro_liquido).replace(",", "X").replace(".", ",").replace("X", ".") if previsoes else "0,00" }}
+                        </strong>
                     </div>
                 </div>
+
                 <div class="card-title" style="margin-top: 25px;">🔔 Alertas e Lembretes</div>
                 <div class="alert-list">
-                    <div class="transaction expense" style="margin: 10px 0;">
-                        <strong>DAS MEI</strong> - Vence em 5 dias
-                    </div>
-                    <div class="transaction expense" style="margin: 10px 0;">
-                        <strong>Internet</strong> - Vence amanhã
-                    </div>
-                    <div class="transaction income" style="margin: 10px 0;">
-                        <strong>Pagamento Cliente X</strong> - Esperado para sexta
-                    </div>
-                    <div class="transaction expense" style="margin: 10px 0;">
-                        <strong>NF-e Cliente Y</strong> - Pendente de emissão
-                    </div>
+                    <div class="transaction expense"><strong>DAS MEI</strong> - Vence em 5 dias</div>
+                    <div class="transaction expense"><strong>Internet</strong> - Vence amanhã</div>
+                    <div class="transaction income"><strong>Pagamento Cliente X</strong> - Esperado para sexta</div>
+                    <div class="transaction expense"><strong>NF-e Cliente Y</strong> - Pendente de emissão</div>
                 </div>
             </div>
+
 
             <!-- Invoice Control Section -->
             <div class="card">
