@@ -230,41 +230,57 @@
             <!-- Invoice Control Section -->
             <div class="card">
                 <div class="card-title">📄 Controle de Notas Fiscais</div>
+
                 <div class="nfe-section">
-                    <div class="nfe-item">
-                        <div>
-                            <div><strong>Cliente A</strong></div>
-                            <div style="font-size: 0.8em; color: var(--secondary);">Projeto Website</div>
+                    {% for nf in notas %}
+                        <div class="nfe-item" data-client="{{ loop.index }}">
+                            <div class="nfe-header">
+                                <div>
+                                    <div><strong>{{ nf.cliente or "Pendente" }}</strong></div>
+                                    <div class="project-name">
+                                        {% if nf.cliente == "Mextech Tecnologia industrial" or nf.cliente == "Mextech" %}
+                                            Desenvolvedor FullCycle
+                                        {% else %}
+                                            Pendente
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {% set status_class = "status-pending" %}
+                                {% if nf.status == "Emitida" %}
+                                    {% set status_class = "status-paid" %}
+                                {% elif nf.status == "Atrasada" %}
+                                    {% set status_class = "status-overdue" %}
+                                {% endif %}
+                                <div class="nfe-status {{ status_class }}">{{ nf.status or "Pendente" }}</div>
+                            </div>
+
+                            <div class="nfe-details">
+                                <div><strong>CNPJ:</strong> {{ nf.cnpj or "Pendente" }}</div>
+                                <div><strong>Contato:</strong> {{ nf.contato or "Pendente" }}</div>
+                                <div><strong>Número NF:</strong> {{ nf.numero_nf or "Pendente" }}</div>
+                                <div><strong>Valor:</strong> R$ {{ "%.2f"|format(nf.valor) if nf.valor else "Pendente" }}</div>
+                                <div><strong>Data de Emissão:</strong> 
+                                    {{ nf.data_emissao.strftime("%d/%m/%Y") if nf.data_emissao else "Pendente" }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="nfe-status status-pending">Pendente</div>
-                    </div>
-                    <div class="nfe-item">
-                        <div>
-                            <div><strong>Cliente B</strong></div>
-                            <div style="font-size: 0.8em; color: var(--secondary);">Sistema ERP</div>
-                        </div>
-                        <div class="nfe-status status-paid">Emitida</div>
-                    </div>
-                    <div class="nfe-item">
-                        <div>
-                            <div><strong>Cliente C</strong></div>
-                            <div style="font-size: 0.8em; color: var(--secondary);">App Mobile</div>
-                        </div>
-                        <div class="nfe-status status-overdue">Atrasada</div>
-                    </div>
+                    {% endfor %}
                 </div>
-                <div class="card-title" style="margin-top: 25px;">📈 Progresso Mensal</div>
-                <div>
-                    <div style="display: flex; justify-content: space-between;">
+
+                <div class="card-title progress-title">📈 Progresso Mensal</div>
+                <div class="progress-section">
+                    <div class="progress-info">
                         <span>Meta de Faturamento</span>
                         <span>R$ 6.000,00</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 88%;"></div>
                     </div>
-                    <div style="text-align: center; color: var(--accent); font-weight: bold;">88% Concluído</div>
+                    <div class="progress-percentage">88% Concluído</div>
                 </div>
             </div>
+
         </div>
 
         <!-- Calendar Section -->
@@ -347,6 +363,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
