@@ -279,87 +279,143 @@
         </div>
 
         <!-- Calendar Section -->
-    <div class="card calendar-container" id="calendar-container">
-        <div class="calendar-header">
-            <div>
-                <span class="calendar-title">
-                    📅 Calendário Financeiro - {{ mes_nome }}
-                </span>
-                <span class="calendar-year">{{ ano }}</span>
+        <div class="card calendar-container" id="calendar-container">
+            <div class="calendar-header">
+                <div>
+                    <span class="calendar-title">
+                        📅 Calendário Financeiro - {{ mes_nome }}
+                    </span>
+                    <span class="calendar-year">{{ ano }}</span>
+                </div>
+                <div class="month-navigation">
+                    <a href="{{ url_for('index', ano=mes_anterior[0], mes=mes_anterior[1]) }}" 
+                       class="nav-button" 
+                       onclick="animateCalendar('left')">&lt; Anterior</a>
+                    <a href="{{ url_for('index', ano=hoje.year, mes=hoje.month) }}" 
+                       class="nav-button">Hoje</a>
+                    <a href="{{ url_for('index', ano=proximo_mes[0], mes=proximo_mes[1]) }}" 
+                       class="nav-button" 
+                       onclick="animateCalendar('right')">Próximo &gt;</a>
+                </div>
             </div>
-            <div class="month-navigation">
-                <a href="{{ url_for('index', ano=mes_anterior[0], mes=mes_anterior[1]) }}" 
-                class="nav-button" 
-                onclick="animateCalendar('left')">&lt; Anterior</a>
-                <a href="{{ url_for('index', ano=hoje.year, mes=hoje.month) }}" 
-                class="nav-button">Hoje</a>
-                <a href="{{ url_for('index', ano=proximo_mes[0], mes=proximo_mes[1]) }}" 
-                class="nav-button" 
-                onclick="animateCalendar('right')">Próximo &gt;</a>
-            </div>
-        </div>
 
-        <div class="calendar-grid">
-            <div class="calendar-day header">Dom</div>
-            <div class="calendar-day header">Seg</div>
-            <div class="calendar-day header">Ter</div>
-            <div class="calendar-day header">Qua</div>
-            <div class="calendar-day header">Qui</div>
-            <div class="calendar-day header">Sex</div>
-            <div class="calendar-day header">Sáb</div>
+            <div class="calendar-grid">
+                <div class="calendar-day header">Dom</div>
+                <div class="calendar-day header">Seg</div>
+                <div class="calendar-day header">Ter</div>
+                <div class="calendar-day header">Qua</div>
+                <div class="calendar-day header">Qui</div>
+                <div class="calendar-day header">Sex</div>
+                <div class="calendar-day header">Sáb</div>
 
-            {% for _ in range(primeiro_dia_semana) %}
-                <div class="calendar-day empty"></div>
-            {% endfor %}
+                {% for _ in range(primeiro_dia_semana) %}
+                    <div class="calendar-day empty"></div>
+                {% endfor %}
 
-            {% for dia in range(1, dias_no_mes + 1) %}
-                {% set eventos_dia = eventos | selectattr("data_evento.day", "equalto", dia) | list %}
-                <div class="calendar-day">
-                    <div class="day-number">{{ dia }}</div>
+                {% for dia in range(1, dias_no_mes + 1) %}
+                    {% set eventos_dia = eventos | selectattr("data_evento.day", "equalto", dia) | list %}
+                    <div class="calendar-day">
+                        <div class="day-number">{{ dia }}</div>
 
-                    {% for evento in eventos_dia %}
-                        {% set classe_categoria = 
-                            "income" if evento.categoria in ["salário", "investimento", "bonus"] 
-                            else "tax" if evento.categoria in ["imposto", "taxa"]
-                            else "expense" 
-                        %}
-                        
-                        {% set classe_recorrente = "recurrent" if evento.recorrente else "" %}
-
-                        <div class="transaction {{ classe_categoria }} {{ classe_recorrente }}" 
-                            onclick="togglePayment({{ evento.id }}, {{ evento.pago | lower }})">
+                        {% for evento in eventos_dia %}
+                            {% set classe_categoria = 
+                                "income" if evento.categoria in ["salário", "investimento", "bonus"] 
+                                else "tax" if evento.categoria in ["imposto", "taxa"]
+                                else "expense" 
+                            %}
                             
-                            <span class="transaction-name">
-                                {{ evento.nome }}
-                                {% if evento.recorrente %}
-                                    <span class="recurrent-icon" title="Recorrente">🔄</span>
-                                {% endif %}
-                            </span>
+                            {% set classe_recorrente = "recurrent" if evento.recorrente else "" %}
+                            {% set classe_inativo = "inactive" if not evento.ativo else "" %}
 
-                            <div class="transaction-details">
-                                <span class="transaction-value">
-                                    R$ {{ "%.2f"|format(evento.valor) }}
-                                </span>
+                            <div class="transaction {{ classe_categoria }} {{ classe_recorrente }} {{ classe_inativo }}" 
+                                 onclick="openEventModal({{ evento.id }})">
                                 
-                                <div class="badges-container">
+                                <span class="transaction-name">
+                                    {{ evento.nome }}
                                     {% if evento.recorrente %}
-                                        <span class="recurrent-badge">Recorrente</span>
+                                        <span class="recurrent-icon" title="Recorrente">🔄</span>
                                     {% endif %}
+                                    {% if not evento.ativo %}
+                                        <span class="inactive-badge" title="Serviço Inativo">⏸️</span>
+                                    {% endif %}
+                                </span>
+
+                                <div class="transaction-details">
+                                    <span class="transaction-value">
+                                        R$ {{ "%.2f"|format(evento.valor) }}
+                                    </span>
                                     
-                                    {% if evento.pago %}
-                                        <span class="status-badge paid">Pago</span>
-                                    {% else %}
-                                        <span class="status-badge pending">Pendente</span>
-                                    {% endif %}
+                                    <div class="badges-container">
+                                        {% if evento.recorrente %}
+                                            <span class="recurrent-badge">Recorrente</span>
+                                        {% endif %}
+                                        
+                                        {% if evento.pago %}
+                                            <span class="status-badge paid">Pago</span>
+                                        {% else %}
+                                            <span class="status-badge pending">Pendente</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
 
+        <!-- Modal de Edição de Evento -->
+        <div id="eventModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">📝 Editar Evento</h3>
+                    <button class="close-modal" onclick="closeEventModal()">&times;</button>
+                </div>
+                
+                <form id="eventForm">
+                    <input type="hidden" id="eventId">
+                    
+                    <div class="form-group">
+                        <label for="eventName">Nome do Serviço</label>
+                        <input type="text" id="eventName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventValue">Valor (R$)</label>
+                        <input type="number" id="eventValue" class="form-input" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventPaid">Status de Pagamento</label>
+                        <select id="eventPaid" class="form-select">
+                            <option value="true">Pago</option>
+                            <option value="false">Pendente</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventRecurrent">Recorrente</label>
+                        <select id="eventRecurrent" class="form-select">
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventActive">Status do Serviço</label>
+                        <select id="eventActive" class="form-select">
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeEventModal()">Cancelar</button>
+                        <button type="submit" class="btn-save">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>

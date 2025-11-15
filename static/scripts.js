@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     nfeItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            // Impedir que o clique no status dispare o toggle do card
             if (e.target.classList.contains('nfe-status')) return;
             
             if (this.classList.contains('expanded')) {
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Função para mudar o estado do status
     const estados = [
         { texto: "Pendente", classe: "status-pending" },
         { texto: "Emitida", classe: "status-paid" },
@@ -29,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         statusEl.style.cursor = "pointer";
 
         statusEl.addEventListener("click", async function(e) {
-            e.stopPropagation(); // Impedir que o clique propague para o card
+            e.stopPropagation();
             
             const atual = statusEl.textContent.trim();
             let idx = estados.findIndex(e => e.texto === atual);
@@ -37,20 +35,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const proximo = estados[(idx + 1) % estados.length];
 
-            // Remove as classes antigas
             statusEl.classList.remove("status-pending", "status-paid", "status-overdue");
-
-            // Adiciona a nova
             statusEl.classList.add(proximo.classe);
             statusEl.textContent = proximo.texto;
 
-            // Captura o número da NF
             const nfItem = statusEl.closest(".nfe-item");
             const numeroNF = nfItem.querySelector(".nfe-details div:nth-child(3)")?.textContent.replace("Número NF:", "").trim();
 
-            console.log(`🟡 Atualizando status da NF ${numeroNF} → ${proximo.texto}`);
+            console.log(`Atualizando status da NF ${numeroNF} → ${proximo.texto}`);
 
-            // Atualiza o status no banco via Flask
             try {
                 const response = await fetch("/atualizar_status", {
                     method: "POST",
@@ -64,19 +57,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
 
                 if (result.success) {
-                    console.log("✅ Status atualizado no banco com sucesso!");
+                    console.log("Status atualizado no banco com sucesso!");
                 } else {
-                    console.error("❌ Erro ao atualizar status:", result.error);
+                    console.error("Erro ao atualizar status:", result.error);
                     alert("Erro ao atualizar status no banco: " + result.error);
                 }
             } catch (err) {
-                console.error("❌ Falha na requisição:", err);
+                console.error("Falha na requisição:", err);
                 alert("Falha ao conectar ao servidor.");
             }
         });
     });
 
-    // Inicializar gráfico e data
     renderChart();
     const transactionDate = document.getElementById('transactionDate');
     if (transactionDate) {
@@ -85,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ======== CHART DATA ======== //
 const expenseData = [
     { label: 'Salário', value: 3000, percentage: '56.3%' },
     { label: 'Custo de vida', value: 600, percentage: '11.3%' },
@@ -96,7 +87,6 @@ const expenseData = [
     { label: 'Imposto', value: 80, percentage: '1.5%' }
 ];
 
-// ======== CHART RENDERING ======== //
 function renderChart() {
     const chart = document.getElementById('expenseChart');
     if (!chart) return;
@@ -119,7 +109,6 @@ function renderChart() {
     });
 }
 
-// ======== AÇÕES ======== //
 function gerarNF() {
     alert('Função: Gerar Nota Fiscal\nIntegração com API de emissão de NF-e para MEI');
 }
@@ -160,32 +149,90 @@ function processarArquivos() {
     alert('Processando arquivos...\nOs dados serão importados e categorizados automaticamente.');
 }
 
-function togglePayment(itemId, currentlyPaid) {
-    if (confirm('Deseja alterar o status de pagamento?')) {
-        fetch('/atualizar_pagamento', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                item_id: itemId,
-                pago: !currentlyPaid
-            })
-        })
+// Modal de Evento
+let currentEventId = null;
+
+function openEventModal(eventId) {
+    currentEventId = eventId;
+    
+    fetch(`/get_evento/${eventId}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload();
+                const evento = data.evento;
+                
+                document.getElementById('eventId').value = evento.id;
+                document.getElementById('eventName').value = evento.nome;
+                document.getElementById('eventValue').value = evento.valor;
+                document.getElementById('eventPaid').value = evento.pago.toString();
+                document.getElementById('eventRecurrent').value = evento.recorrente.toString();
+                document.getElementById('eventActive').value = evento.ativo.toString();
+                
+                // Atualiza o título do modal para incluir o status
+                const modalTitle = document.getElementById('modalTitle');
+                if (!evento.ativo) {
+                    modalTitle.innerHTML = '📝 Editar Evento <span style="color: #666; font-size: 0.8em;">(Inativo)</span>';
+                } else {
+                    modalTitle.innerHTML = '📝 Editar Evento';
+                }
+                
+                document.getElementById('eventModal').style.display = 'block';
             } else {
-                alert('Erro ao atualizar pagamento: ' + data.error);
+                alert('Erro ao carregar evento: ' + data.error);
             }
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao conectar com o servidor');
+            alert('Erro ao carregar evento');
         });
-    }
 }
+
+function closeEventModal() {
+    document.getElementById('eventModal').style.display = 'none';
+    currentEventId = null;
+}
+
+// Fechar modal ao clicar fora
+document.getElementById('eventModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEventModal();
+    }
+});
+
+// Submeter formulário de evento
+document.getElementById('eventForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        id: document.getElementById('eventId').value,
+        nome: document.getElementById('eventName').value,
+        valor: parseFloat(document.getElementById('eventValue').value),
+        pago: document.getElementById('eventPaid').value === 'true',
+        recorrente: document.getElementById('eventRecurrent').value === 'true',
+        ativo: document.getElementById('eventActive').value === 'true'
+    };
+    
+    fetch('/atualizar_evento', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeEventModal();
+            location.reload();
+        } else {
+            alert('Erro ao atualizar evento: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao atualizar evento');
+    });
+});
 
 function animateCalendar(direction) {
     const container = document.getElementById('calendar-container');

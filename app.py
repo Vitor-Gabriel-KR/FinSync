@@ -13,14 +13,11 @@ def index():
     previsoes = get_previsoes_mes_atual()
     notas = get_notas_fiscais()
     
-    # Obter parâmetros de ano e mês para o calendário
     ano = request.args.get('ano', type=int)
     mes = request.args.get('mes', type=int)
     
-    # Dados do calendário
     dados_calendario = CalendarioService.get_calendario_mes(ano, mes)
     
-    # Calcular mês anterior e próximo
     hoje = date.today()
     mes_anterior = CalendarioService.get_mes_anterior(
         dados_calendario['ano'], 
@@ -57,20 +54,49 @@ def atualizar_status():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route("/atualizar_pagamento", methods=["POST"])
-def atualizar_pagamento():
+@app.route("/atualizar_evento", methods=["POST"])
+def atualizar_evento():
     data = request.get_json()
-    item_id = data.get("item_id")
-    pago = data.get("pago")
-
-    if item_id is None or pago is None:
-        return jsonify({"success": False, "error": "Dados inválidos"}), 400
+    item_id = data.get("id")
+    
+    if not item_id:
+        return jsonify({"success": False, "error": "ID do evento é obrigatório"}), 400
 
     try:
-        CalendarioService.atualizar_status_pagamento(item_id, pago)
+        dados_atualizacao = {
+            'nome': data.get('nome'),
+            'valor': float(data.get('valor', 0)),
+            'pago': data.get('pago', False),
+            'recorrente': data.get('recorrente', False),
+            'ativo': data.get('ativo', True)
+        }
+        
+        CalendarioService.atualizar_evento(item_id, dados_atualizacao)
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/get_evento/<int:evento_id>")
+def get_evento(evento_id):
+    try:
+        evento = CalendarioService.get_evento_por_id(evento_id)
+        if evento:
+            return jsonify({
+                'success': True,
+                'evento': {
+                    'id': evento['id'],
+                    'nome': evento['nome'],
+                    'valor': float(evento['valor']),
+                    'pago': evento['pago'],
+                    'recorrente': evento['recorrente'],
+                    'ativo': evento['ativo'],
+                    'categoria': evento['categoria']
+                }
+            })
+        else:
+            return jsonify({'success': False, 'error': 'Evento não encontrado'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
