@@ -286,81 +286,45 @@
         <!-- Calendar Section -->
         <div class="card calendar-container">
             <div class="calendar-header">
-                <div class="card-title">📅 Calendário Financeiro - Agosto 2025</div>
+                <div class="card-title">
+                    📅 Calendário Financeiro - {{ calendario[0].data_evento.strftime("%B %Y") if calendario else "" }}
+                </div>
                 <div class="month-navigation">
                     <button class="nav-button">&lt;</button>
                     <button class="nav-button">&gt;</button>
                 </div>
             </div>
+
             <div class="calendar-grid">
-                <div class="calendar-day header">Dom</div>
-                <div class="calendar-day header">Seg</div>
-                <div class="calendar-day header">Ter</div>
-                <div class="calendar-day header">Qua</div>
-                <div class="calendar-day header">Qui</div>
-                <div class="calendar-day header">Sex</div>
-                <div class="calendar-day header">Sáb</div>
+                {% for dia in range(1, 32) %}
+                    {% set eventos = calendario | selectattr("data_evento.day", "equalto", dia) | list %}
+                    <div class="calendar-day">
+                        <div class="day-number">{{ dia }}</div>
 
-                <div class="calendar-day">27</div>
-                <div class="calendar-day">28</div>
-                <div class="calendar-day">29</div>
-                <div class="calendar-day">30</div>
-                <div class="calendar-day">31</div>
-                <div class="calendar-day"><div class="day-number">1</div></div>
-                <div class="calendar-day">2</div>
+                        {% for evento in eventos %}
+                            {% set classe_categoria = 
+                                "income" if evento.categoria in ["salário", "investimento", "crédito"] 
+                                else "tax" if evento.categoria == "imposto"
+                                else "expense" 
+                            %}
 
-                <div class="calendar-day">3</div>
-                <div class="calendar-day">
-                    <div class="day-number">4</div>
-                    <div class="transaction expense">Tinder</div>
-                    <div class="transaction income">Salário MEI</div>
-                </div>
-                <div class="calendar-day">
-                    <div class="day-number">5</div>
-                    <div class="transaction expense">CrunchRoll</div>
-                    <div class="transaction tax">DAS MEI</div>
-                </div>
-                <div class="calendar-day">6</div>
-                <div class="calendar-day">7</div>
-                <div class="calendar-day">8</div>
-                <div class="calendar-day">9</div>
+                            <div class="transaction {{ classe_categoria }}">
+                                <span class="transaction-name">{{ evento.nome }}</span>
 
-                <div class="calendar-day">
-                    <div class="day-number">10</div>
-                    <div class="transaction expense">SmartFit</div>
-                    <div class="transaction income">Investimento</div>
-                </div>
-                <div class="calendar-day">11</div>
-                <div class="calendar-day">12</div>
-                <div class="calendar-day">13</div>
-                <div class="calendar-day">14</div>
-                <div class="calendar-day">
-                    <div class="day-number">15</div>
-                    <div class="transaction expense">GamePass</div>
-                    <div class="transaction income">Cliente X</div>
-                </div>
-                <div class="calendar-day">16</div>
-
-                <div class="calendar-day">17</div>
-                <div class="calendar-day">
-                    <div class="day-number">18</div>
-                    <div class="transaction expense">Clube Ifood</div>
-                </div>
-                <div class="calendar-day">19</div>
-                <div class="calendar-day">20</div>
-                <div class="calendar-day">21</div>
-                <div class="calendar-day">22</div>
-                <div class="calendar-day">23</div>
-                
-                <div class="calendar-day">24</div>
-                <div class="calendar-day">25</div>
-                <div class="calendar-day">26</div>
-                <div class="calendar-day">27</div>
-                <div class="calendar-day">28</div>
-                <div class="calendar-day">29</div>
-                <div class="calendar-day">30</div>
+                                <!-- Badge de status -->
+                                {% if evento.pago %}
+                                    <span class="status-badge paid">Pago</span>
+                                {% else %}
+                                    <span class="status-badge pending">Pendente</span>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
+
+
     </div>
 
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>

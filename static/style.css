@@ -1,3 +1,6 @@
+/* ===============================
+   🎨 VARIÁVEIS DE TEMA
+   =============================== */
 :root { 
     --primary: #0A192F;
     --primary-dark: #020C1B;
@@ -8,6 +11,9 @@
     --dark: #0A192F;
 }
 
+/* ===============================
+   🔧 REGRAS GERAIS / RESET
+   =============================== */
 * {
     margin: 0;
     padding: 0;
@@ -27,6 +33,9 @@ body {
     padding: 20px;
 }
 
+/* ===============================
+   🧭 CABEÇALHO / NAVEGAÇÃO
+   =============================== */
 .header {
     display: flex;
     justify-content: space-between;
@@ -64,6 +73,9 @@ body {
     color: var(--accent);
 }
 
+/* ===============================
+   📊 SEÇÃO PRINCIPAL / DASHBOARD
+   =============================== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -87,6 +99,9 @@ body {
     gap: 10px;
 }
 
+/* ===============================
+   📈 GRÁFICOS / BARRAS DE PROGRESSO
+   =============================== */
 .progress-title {
     margin-top: 25px;
 }
@@ -128,6 +143,9 @@ body {
     color: var(--secondary);
 }
 
+/* ===============================
+   📊 MÉTRICAS / ESTATÍSTICAS
+   =============================== */
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -153,6 +171,9 @@ body {
     color: var(--secondary);
 }
 
+/* ===============================
+   ✏️ FORMULÁRIOS E BOTÕES
+   =============================== */
 .input-section {
     margin-bottom: 20px;
 }
@@ -205,6 +226,9 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* ===============================
+   📂 UPLOAD DE ARQUIVOS
+   =============================== */
 .file-upload {
     display: flex;
     flex-direction: column;
@@ -222,6 +246,9 @@ body {
     border-color: var(--accent);
 }
 
+/* ===============================
+   ⚡ AÇÕES RÁPIDAS
+   =============================== */
 .quick-actions {
     display: flex;
     flex-direction: column;
@@ -248,6 +275,9 @@ body {
     font-size: 1.5em;
 }
 
+/* ===============================
+   💰 RESULTADOS / CÁLCULOS
+   =============================== */
 .calculation-results {
     margin-top: 20px;
 }
@@ -272,6 +302,9 @@ body {
     color: #9ef59b;
 }
 
+/* ===============================
+   📅 CALENDÁRIO
+   =============================== */
 .calendar-container {
     margin-top: 30px;
 }
@@ -314,6 +347,9 @@ body {
     color: var(--light);
 }
 
+/* ===============================
+   🧾 TRANSAÇÕES / NFE
+   =============================== */
 .transaction {
     font-size: 0.75em;
     padding: 4px 6px;
@@ -341,6 +377,9 @@ body {
     border-left-color: #FF9800;
 }
 
+/* ===============================
+   📜 SEÇÃO DE NOTAS FISCAIS (NFE)
+   =============================== */
 .nfe-section {
     margin-top: 20px;
 }
@@ -372,6 +411,7 @@ body {
     color: var(--secondary);
 }
 
+/* STATUS DAS NFES */
 .nfe-status {
     padding: 6px 10px;
     border-radius: 6px;
@@ -409,6 +449,7 @@ body {
     animation: slideDown 0.3s ease forwards;
 }
 
+/* ANIMAÇÃO AO EXPANDIR NFE */
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
@@ -423,6 +464,9 @@ body {
     display: block;
 }
 
+/* ===============================
+   📉 PROGRESSOS E AUTOMAÇÕES
+   =============================== */
 .progress-section {
     margin-top: 15px;
 }
@@ -454,6 +498,9 @@ body {
     font-weight: bold;
 }
 
+/* ===============================
+   ⚙️ ESTATÍSTICAS DE AUTOMAÇÃO
+   =============================== */
 .automation-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -475,6 +522,9 @@ body {
     margin: 10px 0;
 }
 
+/* ===============================
+   🔗 FONTES DE DADOS / TAGS
+   =============================== */
 .data-sources {
     display: flex;
     flex-wrap: wrap;
