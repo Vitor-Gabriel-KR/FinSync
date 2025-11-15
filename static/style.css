@@ -9,8 +9,13 @@
     --accent: #64FFDA;
     --gray: #8892B0;
     --dark: #0A192F;
+        --success: #4CAF50;
+    --warning: #FF9800;
+    --income: #4CAF50;
+    --expense: #f44336;
+    --tax: #FF9800;
+    --recurrent: #9C27B0;
 }
-
 /* ===============================
    🔧 REGRAS GERAIS / RESET
    =============================== */
@@ -305,8 +310,10 @@ body {
 /* ===============================
    📅 CALENDÁRIO
    =============================== */
+/* ===== COMPONENTE CALENDÁRIO ===== */
 .calendar-container {
     margin-top: 30px;
+    animation: fadeIn 0.5s ease-in;
 }
 
 .calendar-header {
@@ -314,8 +321,45 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    padding: 20px;
+    background: var(--primary);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.calendar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--light);
+}
+
+.calendar-year {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-left: 10px;
+}
+
+.month-navigation {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background: var(--accent);
+    color: var(--light);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    background: #d43a55;
+    transform: translateY(-2px);
+}
+
+/* ===== GRADE DO CALENDÁRIO ===== */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -329,8 +373,14 @@ body {
 .calendar-day {
     background: var(--primary-dark);
     padding: 10px;
-    min-height: 100px;
+    min-height: 120px;
     position: relative;
+    transition: all 0.3s ease;
+}
+
+.calendar-day:hover {
+    background: #1c2a4e;
+    transform: scale(1.02);
 }
 
 .calendar-day.header {
@@ -339,14 +389,133 @@ body {
     text-align: center;
     min-height: auto;
     padding: 15px;
+    color: var(--light);
+}
+
+.calendar-day.empty {
+    background: var(--primary);
+    min-height: 120px;
 }
 
 .day-number {
     font-weight: bold;
     margin-bottom: 5px;
     color: var(--light);
+    font-size: 1.1rem;
 }
 
+/* ===== COMPONENTE DE TRANSAÇÃO ===== */
+.transaction {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+.transaction.income {
+    background: rgba(76, 175, 80, 0.2);
+    border-left: 3px solid var(--income);
+}
+
+.transaction.expense {
+    background: rgba(244, 67, 54, 0.2);
+    border-left: 3px solid var(--expense);
+}
+
+.transaction.tax {
+    background: rgba(255, 152, 0, 0.2);
+    border-left: 3px solid var(--tax);
+}
+
+.transaction.recurrent {
+    border-right: 3px solid var(--recurrent);
+}
+
+.transaction-name {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 3px;
+}
+
+/* ===== BADGES ===== */
+.status-badge {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.status-badge.paid {
+    background: var(--success);
+    color: white;
+}
+
+.status-badge.pending {
+    background: var(--warning);
+    color: white;
+}
+
+.recurrent-badge {
+    background: var(--recurrent);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    margin-left: 5px;
+}
+
+.recurrent-icon {
+    color: var(--recurrent);
+    margin-left: 5px;
+    font-size: 0.8rem;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.calendar-slide-enter {
+    animation: slideOutLeft 0.3s ease;
+}
+
+.calendar-slide-exit {
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideOutLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+    }
+    
+    .transaction {
+        padding: 5px;
+        font-size: 0.7rem;
+    }
+}
 /* ===============================
    🧾 TRANSAÇÕES / NFE
    =============================== */

@@ -75,6 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Inicializar gráfico e data
+    renderChart();
+    const transactionDate = document.getElementById('transactionDate');
+    if (transactionDate) {
+        const today = new Date();
+        transactionDate.value = today.toISOString().split('T')[0];
+    }
 });
 
 // ======== CHART DATA ======== //
@@ -152,10 +160,40 @@ function processarArquivos() {
     alert('Processando arquivos...\nOs dados serão importados e categorizados automaticamente.');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    renderChart();
-    const transactionDate = document.getElementById('transactionDate');
-    if (transactionDate) {
-        transactionDate.valueAsDate = new Date();
+function togglePayment(itemId, currentlyPaid) {
+    if (confirm('Deseja alterar o status de pagamento?')) {
+        fetch('/atualizar_pagamento', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+                pago: !currentlyPaid
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Erro ao atualizar pagamento: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao conectar com o servidor');
+        });
     }
-});
+}
+
+function animateCalendar(direction) {
+    const container = document.getElementById('calendar-container');
+    if (!container) return;
+    
+    container.style.animation = `slideOut${direction === 'left' ? 'Left' : 'Right'} 0.3s ease`;
+    
+    setTimeout(() => {
+        container.style.animation = `slideIn${direction === 'left' ? 'Right' : 'Left'} 0.3s ease`;
+    }, 300);
+}
