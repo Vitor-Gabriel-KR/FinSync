@@ -24,22 +24,72 @@
 
         <!-- Main Dashboard Grid -->
         <div class="dashboard-grid">
-            <!-- Chart Section -->
             <div class="card">
                 <div class="card-title">📊 Distribuição Financeira</div>
                 <div class="chart-container">
-                    <div class="bar-chart" id="expenseChart"></div>
-                </div>
-                <div class="automation-stats">
-                    <div class="automation-stat">
-                        <div class="metric-label">Tempo Economizado</div>
-                        <div class="stat-number">12h</div>
-                        <div>este mês</div>
+                    <div class="bar-chart" id="expenseChart">
+                        <div class="bar income" style="height: 100%;" data-value="3000.00">
+                            <div class="bar-value">R$ 3.000,00</div>
+                            <div class="bar-label">Receitas</div>
+                        </div>
+
+                        <div class="bar expense" style="height: 20%;" data-value="600.00">
+                            <div class="bar-value">R$ 600,00</div>
+                            <div class="bar-label">Gastos Presumidos</div>
+                        </div>
+                        
+                        <div class="bar expense" style="height: 18.7%;" data-value="560.00">
+                            <div class="bar-value">R$ 560,00</div>
+                            <div class="bar-label">Investimento</div>
+                        </div>
+                        
+                        <div class="bar expense" style="height: 12.6%;" data-value="377.00">
+                            <div class="bar-value">R$ 377,00</div>
+                            <div class="bar-label">Sedmo</div>
+                        </div>
+                        
+                        <div class="bar expense" style="height: 7.1%;" data-value="214.00">
+                            <div class="bar-value">R$ 214,00</div>
+                            <div class="bar-label">Assinaturas</div>
+                        </div>
+
+                        <div class="bar expense" style="height: 2.7%;" data-value="80.00">
+                            <div class="bar-value">R$ 80,00</div>
+                            <div class="bar-label">Outros</div>
+                        </div>
+                        
+                        <div class="bar profit" style="height: 22.3%;" data-value="669.00">
+                            <div class="bar-value">R$ 669,00</div>
+                            <div class="bar-label">Lucro Líquido</div>
+                        </div>
                     </div>
-                    <div class="automation-stat">
-                        <div class="metric-label">Processos Automatizados</div>
-                        <div class="stat-number">85%</div>
-                        <div>dos processos manuais</div>
+                </div>
+                
+                <div class="financial-summary">
+                    <div class="summary-item">
+                        <span>Receita Total:</span>
+                        <span class="summary-value">R$ 3.000,00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Despesas Totais:</span>
+                        <span class="summary-value">R$ 2.331,00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Lucro Líquido:</span>
+                        <span class="summary-value">R$ 669,00</span>
+                    </div>
+                </div>
+
+                <div class="financial-stats">
+                    <div class="financial-stat">
+                        <div class="metric-label">Margem de Lucro</div>
+                        <div class="stat-number">22,3%</div>
+                        <div>do faturamento</div>
+                    </div>
+                    <div class="financial-stat">
+                        <div class="metric-label">Despesas</div>
+                        <div class="stat-number">77,7%</div>
+                        <div>do faturamento</div>
                     </div>
                 </div>
             </div>
@@ -262,18 +312,6 @@
                             </div>
                         </div>
                     {% endfor %}
-                </div>
-
-                <div class="card-title progress-title">📈 Progresso Mensal</div>
-                <div class="progress-section">
-                    <div class="progress-info">
-                        <span>Meta de Faturamento</span>
-                        <span>R$ 6.000,00</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 88%;"></div>
-                    </div>
-                    <div class="progress-percentage">88% Concluído</div>
                 </div>
             </div>
         </div>

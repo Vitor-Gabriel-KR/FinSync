@@ -106,7 +106,7 @@ body {
 }
 
 /* ===============================
-   📈 GRÁFICOS / BARRAS DE PROGRESSO
+   📈 GRÁFICOS / BARRAS DE PROGRESSO - ATUALIZADO
    =============================== */
 .progress-title {
     margin-top: 25px;
@@ -115,6 +115,7 @@ body {
 .chart-container {
     height: 300px;
     position: relative;
+    margin-bottom: 20px; /* Adicionado espaçamento inferior */
 }
 
 .bar-chart {
@@ -127,11 +128,24 @@ body {
 
 .bar {
     flex: 1;
-    background: linear-gradient(to top, var(--accent), #64ffda88);
     border-radius: 8px 8px 0 0;
     position: relative;
     min-height: 20px;
     transition: all 0.3s;
+    background: linear-gradient(to top, var(--accent), #64ffda88);
+}
+
+/* NOVOS ESTILOS PARA BARRAS ESPECÍFICAS */
+.bar.income {
+    background: linear-gradient(to top, var(--income), rgba(76, 175, 80, 0.5));
+}
+
+.bar.expense {
+    background: linear-gradient(to top, var(--expense), rgba(244, 67, 54, 0.5));
+}
+
+.bar.profit {
+    background: linear-gradient(to top, var(--accent), rgba(100, 255, 218, 0.5));
 }
 
 .bar:hover {
@@ -147,6 +161,18 @@ body {
     text-align: center;
     font-size: 0.8em;
     color: var(--secondary);
+}
+
+/* NOVO: Valor da barra acima dela */
+.bar-value {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--light);
+    font-weight: bold;
 }
 
 /* ===============================
@@ -306,6 +332,57 @@ body {
     margin-top: 10px;
     font-weight: 600;
     color: #9ef59b;
+}
+
+/* ===============================
+   📊 RESUMO FINANCEIRO - NOVA SEÇÃO
+   =============================== */
+.financial-summary {
+    margin-top: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(136, 146, 176, 0.2);
+}
+
+.summary-value {
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.summary-item.total {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 10px;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #9ef59b;
+}
+
+/* ===============================
+   📊 ESTATÍSTICAS FINANCEIRAS - NOVA SEÇÃO
+   =============================== */
+.financial-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.financial-stat {
+    text-align: center;
+    padding: 15px;
+    background: rgba(136, 146, 176, 0.1);
+    border-radius: 8px;
+}
+
+.stat-number {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 10px 0;
 }
 
 /* ===============================
@@ -921,5 +998,9 @@ body {
     .modal-content {
         width: 95%;
         padding: 20px;
+    }
+    
+    .financial-stats {
+        grid-template-columns: 1fr;
     }
 }
