@@ -11,11 +11,11 @@
         <!-- Header Section -->
         <div class="header">
             <h1>Hub Financeiro MEI</h1>
-            <div class="month-navigation">
+            <!-- <div class="month-navigation">
                 <button class="nav-button">&lt;</button>
                 <h2>{{ mes_nome }} de {{ ano }}</h2>
                 <button class="nav-button">&gt;</button>
-            </div>
+            </div> -->
             <div class="user-info">
                 <span>👤</span>
                 <span>Vitor Gabriel - MEI</span>
@@ -28,38 +28,43 @@
                 <div class="card-title">📊 Distribuição Financeira</div>
                 <div class="chart-container">
                     <div class="bar-chart" id="expenseChart">
-                        <div class="bar income" style="height: 100%;" data-value="3000.00">
-                            <div class="bar-value">R$ 3.000,00</div>
-                            <div class="bar-label">Receitas</div>
+                        <div class="bar income" style="height: 100%;" data-value="{{ distribuicao.salario }}">
+                            <div class="bar-value">R$ {{ distribuicao.salario | format_currency }}</div>
+                            <div class="bar-label">Salário</div>
                         </div>
 
-                        <div class="bar expense" style="height: 20%;" data-value="600.00">
-                            <div class="bar-value">R$ 600,00</div>
+                        <div class="bar expense" style="height: {{ (distribuicao.custo_vida / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.custo_vida }}">
+                            <div class="bar-value">R$ {{ distribuicao.custo_vida | format_currency }}</div>
+                            <div class="bar-label">Custo de Vida</div>
+                        </div>
+                        
+                        <div class="bar expense" style="height: {{ (distribuicao.gastos_presumidos / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.gastos_presumidos }}">
+                            <div class="bar-value">R$ {{ distribuicao.gastos_presumidos | format_currency }}</div>
                             <div class="bar-label">Gastos Presumidos</div>
                         </div>
                         
-                        <div class="bar expense" style="height: 18.7%;" data-value="560.00">
-                            <div class="bar-value">R$ 560,00</div>
+                        <div class="bar expense" style="height: {{ (distribuicao.investimento / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.investimento }}">
+                            <div class="bar-value">R$ {{ distribuicao.investimento | format_currency }}</div>
                             <div class="bar-label">Investimento</div>
                         </div>
                         
-                        <div class="bar expense" style="height: 12.6%;" data-value="377.00">
-                            <div class="bar-value">R$ 377,00</div>
-                            <div class="bar-label">Sedmo</div>
+                        <div class="bar expense" style="height: {{ (distribuicao.credito / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.credito }}">
+                            <div class="bar-value">R$ {{ distribuicao.credito | format_currency }}</div>
+                            <div class="bar-label">Crédito</div>
                         </div>
-                        
-                        <div class="bar expense" style="height: 7.1%;" data-value="214.00">
-                            <div class="bar-value">R$ 214,00</div>
+
+                        <div class="bar expense" style="height: {{ (distribuicao.assinaturas / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.assinaturas }}">
+                            <div class="bar-value">R$ {{ distribuicao.assinaturas | format_currency }}</div>
                             <div class="bar-label">Assinaturas</div>
                         </div>
 
-                        <div class="bar expense" style="height: 2.7%;" data-value="80.00">
-                            <div class="bar-value">R$ 80,00</div>
-                            <div class="bar-label">Outros</div>
+                        <div class="bar expense" style="height: {{ (distribuicao.imposto / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.imposto }}">
+                            <div class="bar-value">R$ {{ distribuicao.imposto | format_currency }}</div>
+                            <div class="bar-label">Imposto</div>
                         </div>
                         
-                        <div class="bar profit" style="height: 22.3%;" data-value="669.00">
-                            <div class="bar-value">R$ 669,00</div>
+                        <div class="bar profit" style="height: {{ (distribuicao.lucro_liquido / distribuicao.salario * 100) if distribuicao.salario else 0 }}%;" data-value="{{ distribuicao.lucro_liquido }}">
+                            <div class="bar-value">R$ {{ distribuicao.lucro_liquido | format_currency }}</div>
                             <div class="bar-label">Lucro Líquido</div>
                         </div>
                     </div>
@@ -68,27 +73,27 @@
                 <div class="financial-summary">
                     <div class="summary-item">
                         <span>Receita Total:</span>
-                        <span class="summary-value">R$ 3.000,00</span>
+                        <span class="summary-value">R$ {{ distribuicao.salario | format_currency }}</span>
                     </div>
                     <div class="summary-item">
                         <span>Despesas Totais:</span>
-                        <span class="summary-value">R$ 2.331,00</span>
+                        <span class="summary-value">R$ {{ (distribuicao.custo_vida + distribuicao.gastos_presumidos + distribuicao.investimento + distribuicao.credito + distribuicao.assinaturas + distribuicao.imposto) | format_currency }}</span>
                     </div>
                     <div class="summary-item total">
                         <span>Lucro Líquido:</span>
-                        <span class="summary-value">R$ 669,00</span>
+                        <span class="summary-value">R$ {{ distribuicao.lucro_liquido | format_currency }}</span>
                     </div>
                 </div>
 
                 <div class="financial-stats">
                     <div class="financial-stat">
                         <div class="metric-label">Margem de Lucro</div>
-                        <div class="stat-number">22,3%</div>
+                        <div class="stat-number">{{ "%.1f"|format((distribuicao.lucro_liquido / distribuicao.salario * 100) if distribuicao.salario else 0) }}%</div>
                         <div>do faturamento</div>
                     </div>
                     <div class="financial-stat">
                         <div class="metric-label">Despesas</div>
-                        <div class="stat-number">77,7%</div>
+                        <div class="stat-number">{{ "%.1f"|format(((distribuicao.custo_vida + distribuicao.gastos_presumidos + distribuicao.investimento + distribuicao.credito + distribuicao.assinaturas + distribuicao.imposto) / distribuicao.salario * 100) if distribuicao.salario else 0) }}%</div>
                         <div>do faturamento</div>
                     </div>
                 </div>
@@ -114,12 +119,6 @@
                         <div class="metric-label">Investimento Total</div>
                         <div class="metric-value">
                             R$ {{ "{:,.2f}".format(dados.investimentos).replace(",", "X").replace(".", ",").replace("X", ".") if dados and dados.investimentos else "0,00" }}
-                        </div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Impostos MEI</div>
-                        <div class="metric-value">
-                            R$ {{ "{:,.2f}".format(dados.impostos).replace(",", "X").replace(".", ",").replace("X", ".") if dados and dados.impostos else "0,00" }}
                         </div>
                     </div>
                     <div class="metric">
@@ -266,10 +265,8 @@
 
                 <div class="card-title" style="margin-top: 25px;">🔔 Alertas e Lembretes</div>
                 <div class="alert-list">
-                    <div class="transaction expense"><strong>DAS MEI</strong> - Vence em 5 dias</div>
-                    <div class="transaction expense"><strong>Internet</strong> - Vence amanhã</div>
-                    <div class="transaction income"><strong>Pagamento Cliente X</strong> - Esperado para sexta</div>
-                    <div class="transaction expense"><strong>NF-e Cliente Y</strong> - Pendente de emissão</div>
+                    <div class="transaction expense"><strong>NF-e Mextech</strong> - Gerar ate dia 28</div>
+                    <div class="transaction income"><strong>Internet</strong> - Pago</div>
                 </div>
             </div>
 

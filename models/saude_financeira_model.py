@@ -9,7 +9,7 @@ def get_saude_financeira_mes_atual():
     mes_atual = date.today().replace(day=1)
 
     query = """
-        SELECT total_receitas, total_despesas, lucro_liquido, impostos, timestamp
+        SELECT total_receitas, total_despesas, lucro_liquido, investimentos, timestamp
         FROM saude_financeira
         WHERE mes_referencia = %s
         ORDER BY timestamp DESC
@@ -28,7 +28,7 @@ def get_saude_financeira_mes_atual():
         "total_receitas": float(result[0]),
         "total_despesas": float(result[1]),
         "lucro_liquido": float(result[2]),
-        "impostos": float(result[3]),
+        "investimentos": float(result[3]),
         "timestamp": result[4],
         "mes_atual": mes_atual
     }

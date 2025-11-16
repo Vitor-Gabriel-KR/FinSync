@@ -1,16 +1,24 @@
 from flask import Flask, render_template, jsonify, request
 from models.saude_financeira_model import get_saude_financeira_mes_atual
 from models.previsoes_mes_model import get_previsoes_mes_atual
+from models.distribuicao_financeira_model import get_distribuicao_financeira
 from models.notas_fiscais_model import get_notas_fiscais, update_status_nota
 from models.calendario_financeiro_model import CalendarioService
 from datetime import date
 
 app = Flask(__name__)
 
+@app.template_filter('format_currency')
+def format_currency(value):
+    if value is None:
+        return "0,00"
+    return "{:,.2f}".format(float(value)).replace(",", "X").replace(".", ",").replace("X", ".")
+
 @app.route("/")
 def index():
     dados = get_saude_financeira_mes_atual()
     previsoes = get_previsoes_mes_atual()
+    distribuicao = get_distribuicao_financeira()
     notas = get_notas_fiscais()
     
     ano = request.args.get('ano', type=int)
@@ -32,6 +40,7 @@ def index():
         "index.html",
         dados=dados,
         previsoes=previsoes,
+        distribuicao=distribuicao,
         notas=notas,
         hoje=hoje,
         mes_anterior=mes_anterior,
