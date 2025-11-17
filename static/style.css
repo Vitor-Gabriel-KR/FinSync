@@ -1004,3 +1004,47 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.tabs-container {
+    width: 100%;
+}
+
+.tabs-header {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 15px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.tab-button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tab-button:hover {
+    color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

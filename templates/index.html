@@ -163,47 +163,136 @@
             <!-- Data Input Section -->
             <div class="card">
                 <div class="card-title">➕ Adicionar Dados</div>
-                <div class="input-section">
-                    <div class="input-group">
-                        <label for="transactionType">Tipo de Transação</label>
-                        <select id="transactionType">
-                            <option value="income">Receita</option>
-                            <option value="expense">Despesa</option>
-                            <option value="tax">Imposto</option>
-                        </select>
+                
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-button active" onclick="showTab('transacao')">Transação</button>
+                        <button class="tab-button" onclick="showTab('nota')">Nota Fiscal</button>
+                        <button class="tab-button" onclick="showTab('previsao')">Previsão</button>
                     </div>
-                    <div class="input-group">
-                        <label for="transactionValue">Valor (R$)</label>
-                        <input type="number" id="transactionValue" placeholder="0,00">
+                    
+                    <div class="tab-content active" id="transacao-tab">
+                        <div class="input-section">
+                            <div class="input-group">
+                                <label for="transactionType">Tipo</label>
+                                <select id="transactionType">
+                                    <option value="income">Receita</option>
+                                    <option value="expense">Despesa</option>
+                                    <option value="tax">Imposto</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="transactionValue">Valor (R$)</label>
+                                <input type="number" id="transactionValue" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="transactionCategory">Categoria</label>
+                                <select id="transactionCategory">
+                                    <option value="salario">Salário/Projeto</option>
+                                    <option value="custo-vida">Custo de Vida</option>
+                                    <option value="investimento">Investimento</option>
+                                    <option value="assinatura">Assinatura</option>
+                                    <option value="imposto">Imposto MEI</option>
+                                    <option value="equipamento">Equipamento TI</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="transactionDate">Data</label>
+                                <input type="date" id="transactionDate">
+                            </div>
+                            <div class="input-group">
+                                <label for="transactionDescription">Descrição</label>
+                                <input type="text" id="transactionDescription" placeholder="Descrição">
+                            </div>
+                            <div class="input-group">
+                                <label for="transactionName">Nome</label>
+                                <input type="text" id="transactionName" placeholder="Nome do evento">
+                            </div>
+                            <button class="btn btn-primary" onclick="adicionarTransacao()">Adicionar Transação</button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="transactionCategory">Categoria</label>
-                        <select id="transactionCategory">
-                            <option value="salario">Salário/Projeto</option>
-                            <option value="custo-vida">Custo de Vida</option>
-                            <option value="investimento">Investimento</option>
-                            <option value="assinatura">Assinatura</option>
-                            <option value="imposto">Imposto MEI</option>
-                            <option value="equipamento">Equipamento TI</option>
-                            <option value="outros">Outros</option>
-                        </select>
+                    
+                    <div class="tab-content" id="nota-tab">
+                        <div class="input-section">
+                            <div class="input-group">
+                                <label for="nfNumber">Número NF</label>
+                                <input type="text" id="nfNumber" placeholder="Número da nota">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfFornecedor">Fornecedor/Cliente</label>
+                                <input type="text" id="nfFornecedor" placeholder="Nome">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfValor">Valor (R$)</label>
+                                <input type="number" id="nfValor" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfEmissao">Data Emissão</label>
+                                <input type="date" id="nfEmissao">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfMesReferencia">Mês Referência</label>
+                                <input type="month" id="nfMesReferencia">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfStatus">Status</label>
+                                <select id="nfStatus">
+                                    <option value="pendente">Pendente</option>
+                                    <option value="pago">Pago</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="nfContato">Contato</label>
+                                <input type="text" id="nfContato" placeholder="Contato">
+                            </div>
+                            <div class="input-group">
+                                <label for="nfCNPJ">CNPJ</label>
+                                <input type="text" id="nfCNPJ" placeholder="CNPJ">
+                            </div>
+                            <button class="btn btn-primary" onclick="adicionarNotaFiscal()">Adicionar Nota Fiscal</button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="transactionDate">Data</label>
-                        <input type="date" id="transactionDate">
+                    
+                    <div class="tab-content" id="previsao-tab">
+                        <div class="input-section">
+                            <div class="input-group">
+                                <label for="previsaoMes">Mês Referência</label>
+                                <input type="month" id="previsaoMes">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoSalario">Salário (R$)</label>
+                                <input type="number" id="previsaoSalario" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoCustoVida">Custo de Vida (R$)</label>
+                                <input type="number" id="previsaoCustoVida" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoGastos">Gastos Presumidos (R$)</label>
+                                <input type="number" id="previsaoGastos" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoInvestimento">Investimento (R$)</label>
+                                <input type="number" id="previsaoInvestimento" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoCredito">Crédito (R$)</label>
+                                <input type="number" id="previsaoCredito" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoAssinaturas">Assinaturas (R$)</label>
+                                <input type="number" id="previsaoAssinaturas" placeholder="0,00" step="0.01">
+                            </div>
+                            <div class="input-group">
+                                <label for="previsaoImposto">Imposto (R$)</label>
+                                <input type="number" id="previsaoImposto" placeholder="0,00" step="0.01">
+                            </div>
+                            <button class="btn btn-primary" onclick="adicionarPrevisaoMes()">Adicionar Previsão</button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="transactionDescription">Descrição</label>
-                        <input type="text" id="transactionDescription" placeholder="Descrição da transação">
-                    </div>
-                    <button class="btn btn-primary" onclick="adicionarTransacao()">Adicionar Transação</button>
                 </div>
-                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                    <span>📁</span>
-                    <p>Arraste arquivos (CSV, PDF, XLSX) aqui ou clique para selecionar</p>
-                    <input type="file" id="fileInput" accept=".csv,.pdf,.xlsx" style="display: none;">
-                </div>
-                <button class="btn btn-secondary" onclick="processarArquivos()">Processar Arquivos</button>
             </div>
 
             <!-- Calculations Section -->

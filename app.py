@@ -4,6 +4,7 @@ from models.previsoes_mes_model import get_previsoes_mes_atual
 from models.distribuicao_financeira_model import get_distribuicao_financeira
 from models.notas_fiscais_model import get_notas_fiscais, update_status_nota
 from models.calendario_financeiro_model import CalendarioService
+from models.data_input_model import insert_calendario_financeiro, insert_nota_fiscal, insert_previsao_mes
 from datetime import date
 
 app = Flask(__name__)
@@ -106,6 +107,73 @@ def get_evento(evento_id):
             return jsonify({'success': False, 'error': 'Evento não encontrado'}), 404
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route("/adicionar_transacao", methods=["POST"])
+def adicionar_transacao():
+    try:
+        data = request.get_json()
+        
+        data_evento = data.get('data')
+        categoria = data.get('categoria')
+        valor = data.get('valor')
+        descricao = data.get('descricao')
+        nome = data.get('nome')
+        
+        if not all([data_evento, categoria, valor]):
+            return jsonify({"success": False, "error": "Data, categoria e valor são obrigatórios"}), 400
+        
+        insert_calendario_financeiro(
+            data_evento=data_evento,
+            categoria=categoria,
+            valor=float(valor),
+            descricao=descricao,
+            nome=nome
+        )
+        
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/adicionar_nota_fiscal", methods=["POST"])
+def adicionar_nota_fiscal():
+    try:
+        data = request.get_json()
+        
+        insert_nota_fiscal(
+            numero_nf=data.get('numero_nf'),
+            fornecedor=data.get('fornecedor'),
+            valor=float(data.get('valor', 0)),
+            data_emissao=data.get('data_emissao'),
+            mes_referencia=data.get('mes_referencia'),
+            status=data.get('status', 'pendente'),
+            cliente=data.get('cliente'),
+            contato=data.get('contato'),
+            cnpj=data.get('cnpj')
+        )
+        
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/adicionar_previsao_mes", methods=["POST"])
+def adicionar_previsao_mes():
+    try:
+        data = request.get_json()
+        
+        insert_previsao_mes(
+            mes_referencia=data.get('mes_referencia'),
+            salario=float(data.get('salario', 0)),
+            custo_vida=float(data.get('custo_vida', 0)),
+            gastos_presumidos=float(data.get('gastos_presumidos', 0)),
+            investimento=float(data.get('investimento', 0)),
+            credito=float(data.get('credito', 0)),
+            assinaturas=float(data.get('assinaturas', 0)),
+            imposto=float(data.get('imposto', 0))
+        )
+        
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

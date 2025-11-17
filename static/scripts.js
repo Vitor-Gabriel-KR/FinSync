@@ -75,6 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const today = new Date();
         transactionDate.value = today.toISOString().split('T')[0];
     }
+    
+    const nfEmissao = document.getElementById('nfEmissao');
+    if (nfEmissao) {
+        const today = new Date();
+        nfEmissao.value = today.toISOString().split('T')[0];
+    }
 });
 
 const expenseData = [
@@ -129,27 +135,142 @@ function enviarAlertas() {
     alert('Função: Enviar Alertas\nEnvia alertas por e-mail/WhatsApp sobre pagamentos e obrigações');
 }
 
-function adicionarTransacao() {
-    const type = document.getElementById('transactionType').value;
-    const value = document.getElementById('transactionValue').value;
-    const category = document.getElementById('transactionCategory').value;
-    const date = document.getElementById('transactionDate').value;
-    const description = document.getElementById('transactionDescription').value;
+function showTab(tabName) {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
     
-    if (value && date && description) {
-        alert(`Transação adicionada:\nTipo: ${type}\nValor: R$ ${value}\nCategoria: ${category}\nData: ${date}\nDescrição: ${description}`);
-        document.getElementById('transactionValue').value = '';
-        document.getElementById('transactionDescription').value = '';
-    } else {
-        alert('Por favor, preencha todos os campos obrigatórios.');
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    event.target.classList.add('active');
+    document.getElementById(tabName + '-tab').classList.add('active');
+}
+
+function adicionarTransacao() {
+    const data = {
+        data: document.getElementById('transactionDate').value,
+        categoria: document.getElementById('transactionCategory').value,
+        valor: document.getElementById('transactionValue').value,
+        descricao: document.getElementById('transactionDescription').value,
+        nome: document.getElementById('transactionName').value
+    };
+
+    if (!data.data || !data.categoria || !data.valor) {
+        alert('Por favor, preencha Data, Categoria e Valor.');
+        return;
     }
+
+    fetch('/adicionar_transacao', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Transação adicionada com sucesso!');
+            document.getElementById('transactionValue').value = '';
+            document.getElementById('transactionDescription').value = '';
+            document.getElementById('transactionName').value = '';
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Erro de conexão: ' + error);
+    });
+}
+
+function adicionarNotaFiscal() {
+    const data = {
+        numero_nf: document.getElementById('nfNumber').value,
+        fornecedor: document.getElementById('nfFornecedor').value,
+        valor: document.getElementById('nfValor').value,
+        data_emissao: document.getElementById('nfEmissao').value,
+        mes_referencia: document.getElementById('nfMesReferencia').value,
+        status: document.getElementById('nfStatus').value,
+        cliente: document.getElementById('nfFornecedor').value,
+        contato: document.getElementById('nfContato').value,
+        cnpj: document.getElementById('nfCNPJ').value
+    };
+
+    if (!data.numero_nf || !data.fornecedor || !data.valor) {
+        alert('Por favor, preencha Número NF, Fornecedor e Valor.');
+        return;
+    }
+
+    fetch('/adicionar_nota_fiscal', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Nota fiscal adicionada com sucesso!');
+            document.getElementById('nfNumber').value = '';
+            document.getElementById('nfFornecedor').value = '';
+            document.getElementById('nfValor').value = '';
+            document.getElementById('nfContato').value = '';
+            document.getElementById('nfCNPJ').value = '';
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Erro de conexão: ' + error);
+    });
+}
+
+function adicionarPrevisaoMes() {
+    const data = {
+        mes_referencia: document.getElementById('previsaoMes').value,
+        salario: document.getElementById('previsaoSalario').value,
+        custo_vida: document.getElementById('previsaoCustoVida').value,
+        gastos_presumidos: document.getElementById('previsaoGastos').value,
+        investimento: document.getElementById('previsaoInvestimento').value,
+        credito: document.getElementById('previsaoCredito').value,
+        assinaturas: document.getElementById('previsaoAssinaturas').value,
+        imposto: document.getElementById('previsaoImposto').value
+    };
+
+    if (!data.mes_referencia) {
+        alert('Por favor, preencha o Mês de Referência.');
+        return;
+    }
+
+    fetch('/adicionar_previsao_mes', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Previsão do mês adicionada com sucesso!');
+            document.getElementById('previsaoMes').value = '';
+            document.getElementById('previsaoSalario').value = '';
+            document.getElementById('previsaoCustoVida').value = '';
+            document.getElementById('previsaoGastos').value = '';
+            document.getElementById('previsaoInvestimento').value = '';
+            document.getElementById('previsaoCredito').value = '';
+            document.getElementById('previsaoAssinaturas').value = '';
+            document.getElementById('previsaoImposto').value = '';
+        } else {
+            alert('Erro: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Erro de conexão: ' + error);
+    });
 }
 
 function processarArquivos() {
     alert('Processando arquivos...\nOs dados serão importados e categorizados automaticamente.');
 }
 
-// Modal de Evento
 let currentEventId = null;
 
 function openEventModal(eventId) {
@@ -168,7 +289,6 @@ function openEventModal(eventId) {
                 document.getElementById('eventRecurrent').value = evento.recorrente.toString();
                 document.getElementById('eventActive').value = evento.ativo.toString();
                 
-                // Atualiza o título do modal para incluir o status
                 const modalTitle = document.getElementById('modalTitle');
                 if (!evento.ativo) {
                     modalTitle.innerHTML = '📝 Editar Evento <span style="color: #666; font-size: 0.8em;">(Inativo)</span>';
@@ -192,14 +312,12 @@ function closeEventModal() {
     currentEventId = null;
 }
 
-// Fechar modal ao clicar fora
 document.getElementById('eventModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeEventModal();
     }
 });
 
-// Submeter formulário de evento
 document.getElementById('eventForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
